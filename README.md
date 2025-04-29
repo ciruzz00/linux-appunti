@@ -22,3 +22,4 @@ Questa raccolta di appunti è pensata per documentare concetti, comandi e strume
 ### Sicurezza
 ### Monitoraggio e logging
 ### Strumenti utili
++ (installazione di packet tracer cisco con distrobox)[https://github.com/ciruzz00/linux-appunti/blob/991db4077660feca6c71fe32fdf3a170b632ab89/install-packettracer-container.md]
