@@ -19,6 +19,7 @@ Questa raccolta di appunti è pensata per documentare concetti, comandi e strume
 ### Gestione di pacchetti
 ### Networking
 ### Container e virtualizzazione
++ [troubleshooting](https://github.com/ciruzz00/linux-appunti/blob/50d3ac996e4749449a946ff6f32928adcf8ac9e2/troubleshooting-docker.md)
 ### Sicurezza
 ### Monitoraggio e logging
 ### Strumenti utili
