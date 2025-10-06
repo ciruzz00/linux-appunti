@@ -1,0 +1,88 @@
+
+name: Build Documentation PDF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - '.github/workflows/build-pdf.yml'
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-extra texlive-xetex
+
+      - name: Prepare documentation
+        run: |
+          # Crea un file combinato con tutti i markdown
+          echo "# Documentazione" > combined.md
+          echo "" >> combined.md
+          
+          # Aggiungi il README principale
+          if [ -f README.md ]; then
+            cat README.md >> combined.md
+            echo -e "\n\n---\n\n" >> combined.md
+          fi
+          
+          # Trova e aggiungi tutti i file .md nelle sottocartelle (ordinati)
+          find . -type f -name "*.md" ! -name "README.md" ! -name "combined.md" | sort | while read file; do
+            echo "## $(basename "$file" .md)" >> combined.md
+            echo "" >> combined.md
+            cat "$file" >> combined.md
+            echo -e "\n\n---\n\n" >> combined.md
+          done
+
+      - name: Build PDF
+        run: |
+          pandoc combined.md \
+            -o documentation.pdf \
+            --pdf-engine=xelatex \
+            --toc \
+            --toc-depth=3 \
+            -V geometry:margin=1in \
+            -V documentclass=article \
+            -V fontsize=11pt \
+            --highlight-style=tango
+
+      - name: Get version
+        id: version
+        run: |
+          # Usa la data e l'hash del commit per la versione
+          VERSION="v$(date +'%Y.%m.%d')-$(git rev-parse --short HEAD)"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Documentation ${{ steps.version.outputs.version }}
+          body: |
+            Documentazione aggiornata automaticamente
+            
+            Commit: ${{ github.sha }}
+            Data: $(date +'%Y-%m-%d %H:%M:%S')
+          files: documentation.pdf
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation-pdf
+          path: documentation.pdf
+          retention-days: 90
