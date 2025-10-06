@@ -18,9 +18,10 @@ Questa raccolta di appunti è pensata per documentare concetti, comandi e strume
 ### Shell Scripting
 ### Gestione di pacchetti
 ### Networking
+### Git, Github, Gitlan, DEVOPS
 ### Container e virtualizzazione
-+ [troubleshooting](https://github.com/ciruzz00/linux-appunti/blob/50d3ac996e4749449a946ff6f32928adcf8ac9e2/troubleshooting-docker.md)
++ [troubleshooting](Container-virtualizzazione/troubleshooting-docker.md)
 ### Sicurezza
 ### Monitoraggio e logging
 ### Strumenti utili
-+ [installazione di packet tracer cisco con distrobox](https://github.com/ciruzz00/linux-appunti/blob/991db4077660feca6c71fe32fdf3a170b632ab89/install-packettracer-container.md)
++ [installazione di packet tracer cisco con distrobox](Strumenti/install-packettracer-container.md)
