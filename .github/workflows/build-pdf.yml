@@ -73,7 +73,7 @@ jobs:
             Documentazione aggiornata automaticamente
             
             Commit: ${{ github.sha }}
-            Data: $(date +'%Y-%m-%d %H:%M:%S')
+
           files: documentation.pdf
           draft: false
           prerelease: false
