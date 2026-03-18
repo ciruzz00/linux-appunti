@@ -1,19 +1,17 @@
-
 name: Build Documentation PDF
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - '**.md'
-      - '.github/workflows/build-pdf.yml'
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
   build-pdf:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,17 +25,14 @@ jobs:
 
       - name: Prepare documentation
         run: |
-          # Crea un file combinato con tutti i markdown
           echo "# Documentazione" > combined.md
           echo "" >> combined.md
           
-          # Aggiungi il README principale
           if [ -f README.md ]; then
             cat README.md >> combined.md
             echo -e "\n\n---\n\n" >> combined.md
           fi
           
-          # Trova e aggiungi tutti i file .md nelle sottocartelle (ordinati)
           find . -type f -name "*.md" ! -name "README.md" ! -name "combined.md" | sort | while read file; do
             echo "## $(basename "$file" .md)" >> combined.md
             echo "" >> combined.md
@@ -57,26 +52,13 @@ jobs:
             -V fontsize=11pt \
             --highlight-style=tango
 
-      - name: Get version
-        id: version
-        run: |
-          # Usa la data e l'hash del commit per la versione
-          VERSION="v$(date +'%Y.%m.%d')-$(git rev-parse --short HEAD)"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          name: Documentation ${{ steps.version.outputs.version }}
-          body: |
-            Documentazione aggiornata automaticamente
-            
-            Commit: ${{ github.sha }}
-
           files: documentation.pdf
-          draft: false
-          prerelease: false
+          body: |
+            Documentazione aggiornata
+            Commit: ${{ github.sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
