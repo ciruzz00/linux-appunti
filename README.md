@@ -27,3 +27,8 @@ Questa raccolta di appunti è pensata per documentare concetti, comandi e strume
 ### Monitoraggio e logging
 ### Strumenti utili
 + [installazione di packet tracer cisco con distrobox](Strumenti/install-packettracer-container.md)
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
